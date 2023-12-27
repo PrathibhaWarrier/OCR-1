@@ -1,0 +1,18 @@
+Plant,Phase,Process,Line,CostCenter,LineSpeed,Capacity,WorkCenter,Technology
+Hosur,Base Assembly,Base Assembly - Shock,Cell 1 - Hosur,HO1201,12,1836000,BASEAS01,MT/B&T/CV/BHRS.20
+Hosur,Base Assembly,Base Assembly - Shock,Cell 2 - Hosur,HO1202,10,2203200,BASEAS02,MT/SI/ASI/BHRS 1.0
+Hosur,Base Assembly,Base Assembly - Shock,Cell 3 - Hosur,HO1203,10,2203200,BASEAS03,HRS/ MTV CL
+Hosur,Base Assembly,Base Assembly - Strut,Cell 4 - Hosur,HO1200,16,1377000,BASEAS04,PHRS/FDD
+Hosur,Base Assembly,Base Assembly - Strut,Cell 7 - Hosur,HO1200,16,1377000,BASEAS07,SDD/RV/RV+
+Hosur,Base Assembly,Base Assembly - Strut,Cell 8 -Hosur,HO1200,18,1224000,BASEAS08,DT/MTV
+Hosur,Base Assembly,Head Assembly,Cell 5 - Hosur,HO1200,18,1224000,BASEAS08,DT/MTV CL
+Hosur,Final Assembly,Final Assembly - Double Tubes struts,Line A - Hosur,HO1300,10,2203200,DAMPL00A,DT/RC/RC+
+Hosur,Final Assembly,Final Assembly - Double Tubes struts,Line B - Hosur,HO1302,9,2448000,DAMPL00B,DT
+Hosur,Final Assembly,Final Assembly - Double Tubes struts,Line C- Hosur,HO1303,9,2448000,DAMPL00C,MT/DT
+Hosur,Final Assembly,Final Assembly - Double Tubes struts,Line D AM- Hosur,HO1301,11,2002909,DAMPL00D,DT
+Hosur,Modular assembly,Modular Assembly - Front,FINADM01- Hosur,HO1800,14,1573714,FINADM01,MT/MCX
+Hosur,Modular assembly,Modular Assembly - Front,FINADM02- Hosur,HO1800,14.5,1519448,FINADM02,BOCS/BOCS +
+Hosur,Modular assembly,Modular Assembly - Front,FINADM03- Hosur,HO1700,14,1573714,FINADM03,DT/MT/CI/CV/CV+
+Hosur,Modular assembly,Modular Assembly - Front,FINADM04- Hosur,HO1800,14,1573714,FINADM04,MT/SI/DSI
+Bawal,Base Assembly,Base Assembly - Strut,New Base Line- Bawal,BW1200,10,2203200,BASASF01,DT/MTV/MTV CL
+Bawal,Base Assembly,Base Assembly - Strut,Old Base front- Bawal,BW1200,14,1573714,BASASF02,RV/RV+/DT
