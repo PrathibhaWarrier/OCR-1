@@ -1,0 +1,46 @@
+.MuiIconButton-root{
+    color:rgba(245, 245, 245, 0.774) !important;
+  }
+  .MuiInputBase-input{
+    color:whitesmoke !important;
+  }
+  .white-content .MuiIconButton-root{
+    /* color:rgba(0, 0, 0, 0.54); */
+    /* color:rgb(8, 31, 131) !important; */
+    color:rgba(0, 0, 0, 0.658) !important;
+  }
+  .white-content .MuiInputBase-input{
+    /* color:rgb(8, 31, 131) !important; */
+    color:black !important;
+  }
+  .MuiPickersDay-day{
+    color: black !important;
+  }
+  /* .white-content .MuiPickersDay-day{
+
+} */
+.MuiPickersDay-day{
+    color: black !important;
+}
+.MuiTypography-alignCenter{
+    color:black;
+}
+.MuiPickersCalendarHeader-iconButton{
+    color:rgba(0, 0, 0, 0.54) !important;
+}
+/* .UncontrolledDropdown{
+  position: absolute;
+  top: 20%;   /* Adjust this value based on your desired vertical position */
+  /* left: 50%;  /* Adjust this value based on your desired horizontal position */
+  /* transform: translate(-50%, -50%);
+} */ 
+
+.MyDropdown {
+  position: relative;
+  display: flex;
+  text-align: center;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding-top: 55px
+    
+}
