@@ -108,3 +108,55 @@ deleteSignalEntity(item: any) {
     }
   });
 }
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////
+
+<div *ngIf="column.name === 'settings' ">
+  <mat-icon 
+    color="primary" 
+    matTooltip="Edit event" 
+    class="clickable-item" 
+    (click)="updateSignalEntity(i, element); $event.stopPropagation()">edit_note</mat-icon> &nbsp;&nbsp;
+  <mat-icon 
+    color="warn" 
+    matTooltip="Delete event" 
+    class="clickable-item" 
+    (click)="deleteSignalEntity(element); $event.stopPropagation()">delete</mat-icon> 
+</div>
+
+
+      
+
+
+deleteSignalEntity(item: any) {
+  const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    width: '40%',
+    data: {
+      title: 'Delete Event',
+      message: `Event ${this.signalItem.signal_number}-${item.entity_number} will be permanently deleted. Are you sure?`,
+    },
+  });
+
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result === 'confirmed') {
+      this.service.deleteSignalEntity(item.id).subscribe(() => {
+        this.notification.openSnackbar(
+          'Event deleted successfully!',
+          'Close',
+          snackbarColors.success
+        );
+        // Remove the item from the list
+        this.signalItems = this.signalItems.filter((signal) => signal.id !== item.id);
+      });
+    }
+  });
+}
+
