@@ -160,3 +160,44 @@ deleteSignalEntity(item: any) {
   });
 }
 
+
+
+deleteSignalEntity(item: any) {
+  // Open confirmation dialog
+  const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    width: '40%',
+    data: {
+      title: 'Delete Event',
+      message: `Event ${this.signalItem.signal_number}-${item.entity_number} will be permanently deleted. Are you sure?`,
+    },
+  });
+
+  // Handle dialog result
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result === 'confirmed') {
+      // Call backend service to delete the signal entity by its ID
+      this.service.deleteSignalEntity(item.id).subscribe({
+        next: (response) => {
+          // Show success notification
+          this.notification.openSnackbar(
+            'Event deleted successfully!!',
+            'Close',
+            snackbarColors.success
+          );
+          
+          // Refresh data to reflect changes
+          this.getSignalItemById(this.signalItem.id);
+        },
+        error: (error) => {
+          // Handle error and show notification
+          this.notification.openSnackbar(
+            'Failed to delete event.',
+            'Close',
+            snackbarColors.error
+          );
+        }
+      });
+    }
+  });
+}
+
