@@ -47,3 +47,27 @@ export class YourComponent {
   }
 }
 
+
+///deleteSignal
+
+deleteSignalEntity(item:any) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '40%',
+      data: {
+        title: 'Delete Event',
+        message: `Event ${this.signalItem.signal_number}-${item.entity_number} will be permanently deleted. Are you sure?`,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == 'confirmed') {
+        this.service.deleteSignalEntity(item.id).subscribe((result) => {
+          this.notification.openSnackbar(
+            'Event deleted successfully!!',
+            'Close',
+            snackbarColors.success
+          );
+          this.getSignalItemById(this.signalItem.id);
+        });
+      }
+    });
+  }
