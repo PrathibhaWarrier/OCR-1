@@ -107,3 +107,50 @@ updateSignalEntityFile(item: SignalEntity) {
       }
     });
   }
+
+
+
+
+
+updateSignalEntityFile(item: SignalEntity) {
+    let precedingOption = [];
+    if (this.signalItem.precedingSignal) {
+      precedingOption = this.signalItem.precedingSignal.signalEntities;
+    }
+
+    // Find the specific file in signalEntityFiles that matches the provided file ID
+    let myEntityFile;
+    for (let i = 0; i < this.signalItem.signalEntityFiles.length; i++) {
+      if (item.file_id === this.signalItem.signalEntityFiles[i].id) {
+        myEntityFile = this.signalItem.signalEntityFiles[i];
+        break;
+      }
+    }
+
+    // Prepare the data to pass to the dialog, including only the necessary fields
+    const data = {
+      type: 'entity',
+      title: 'Edit Event File',
+      file_comments: myEntityFile?.file_comments ? myEntityFile.file_comments.replace(/<[\/]*p>/g, '') : null, // Clean up the comments if needed
+      signalNumber: this.signalItem.signal_number,
+      myEntityFile: myEntityFile // Pass the selected file to the dialog
+    };
+
+    const dialogRef = this.dialog.open(UpdateIndividualComponent, {
+      width: '70%',
+      data: data,
+    });
+
+    dialogRef.afterClosed().subscribe((updatedData) => {
+      if (updatedData && myEntityFile) {
+        // Update the file comments with the new value from the dialog
+        myEntityFile.file_comments = updatedData.file_comments;
+
+        // Update the signal entity file with the edited data
+        this.service.updateSignalEntityFile(myEntityFile).subscribe((result: any) => {
+          // Reload the signal item to reflect the changes
+          this.getSignalItemById(this.signalItem?.id);
+        });
+      }
+    });
+  }
