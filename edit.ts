@@ -61,3 +61,49 @@ updateSignalEntityFile(item: SignalEntity) {
     });
   }
   
+, 
+
+
+
+
+
+
+updateSignalEntityFile(item: SignalEntity) {
+    let precedingOption = [];
+    if (this.signalItem.precedingSignal) {
+      precedingOption = this.signalItem.precedingSignal.signalEntities;
+    }
+
+    const data = {
+      type: 'entity',
+      title: 'Edit Event File',
+      event_list_comments: this.signalItem.event_list_comments,
+      dropdownOptions: this.dropdownOptionsSorted,
+      precedingEntityOption: precedingOption,
+      editData: item,  // Pass only the file entity from the specific row
+      signalNumber: this.signalItem.signal_number,
+    };
+
+    const dialogRef = this.dialog.open(UpdateIndividualComponent, {
+      width: '70%',
+      data: data,
+    });
+
+    dialogRef.afterClosed().subscribe((data1) => {
+      data1.file_comments = data1.file_comments ? data1.file_comments.replace(/<[\/]*p>/g, '') : null;
+      
+      if (data1 && item.id) {
+        // Update only the specific file in the current row
+        const updatedFile = {
+          ...item,  // Keep existing properties
+          file_comments: data1.file_comments,  // Update comments
+        };
+
+        this.service
+          .updateSignalEntityFile(updatedFile)  // Send update for only this file
+          .subscribe((result: any) => {
+            this.getSignalItemById(this.signalItem?.id);
+          });
+      }
+    });
+  }
