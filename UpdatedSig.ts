@@ -48,3 +48,46 @@ updateSignalEntityFile(item: SignalEntity) {
       }
     });
 }
+
+
+
+updateSignalEntityFile(item: SignalEntityFiles) {
+  const dialogRef = this.dialog.open(UpdateFileDialogComponent, {
+    width: '40%',
+    data: {
+      title: 'Update Event File',
+      message: `Update comment and replace file for ${this.signalItem.signal_number}-${item.entity_number}-${item.file_id}.`,
+      currentComment: item.comment,  // Assuming item has a 'comment' property
+      currentFile: item.file_path,    // Assuming item has a 'file_path' property
+    },
+  });
+
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result) {
+      const { updatedComment, newFile } = result; // Get updated comment and new file
+      
+      // Create a new SignalEntityFiles object with updated details
+      const updatedEntityFile: SignalEntityFiles = {
+        ...item,                     // Spread the existing item properties
+        comment: updatedComment,     // Update comment
+        file: newFile || item.file   // Replace file if new one is provided
+      };
+
+      // Call the service method to update the entity file
+      this.service.updateSignalEntityFile(updatedEntityFile).subscribe((response) => {
+        this.notification.openSnackbar(
+          'Event File updated successfully!!',
+          'Close',
+          snackbarColors.success
+        );
+        this.getSignalItemById(this.signalItem.id); // Refresh data
+      }, (error) => {
+        this.notification.openSnackbar(
+          'Error updating the Event File. Please try again.',
+          'Close',
+          snackbarColors.error
+        );
+      });
+    }
+  });
+}
