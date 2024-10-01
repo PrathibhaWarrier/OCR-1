@@ -1,156 +1,66 @@
-updateSignalEntityFile(item: SignalEntity) {
-    let precedingOption = [];
-    if(this.signalItem.precedingSignal) {
-      precedingOption = this.signalItem.precedingSignal.signalEntities;
-    }
-    // item.comments=item.comments.replace(/<[\/]*p>/g, '');
-    // console.log(item.comments);
-    // find the file format name
-    // const fileInd = this.dropdownOptionsSorted.FILE_FORMAT.map( (item:any) => { return item.id}).indexOf(this.signalItem?.file_format_id);
-    const data = {
-      type: 'entity',
-      title: 'Edit Event File',
-      // event_list_comments: this.signalItem.event_list_comments,
-      event_list_comments: this.signalItem.event_list_comments,
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsOptional, IsNotEmpty } from 'class-validator';
+import { SignalEntity } from 'db/entities';
 
-      dropdownOptions: this.dropdownOptionsSorted,
-      precedingEntityOption: precedingOption,
-      // precedingValSelected: this.signalItem.preceding_sg_id ? true : false,
-      editData: item,
-      // fileFormatName: fileInd > -1 ? this.dropdownOptionsSorted.FILE_FORMAT[fileInd].name : 'Other',
-      signalNumber: this.signalItem.signal_number,
-      // precedingSinalNumber: this.signalItem.precedingSignal?.signal_number
-    }
-    const dialogRef = this.dialog.open(UpdateIndividualComponent, {
-      width: '70%',
-      data: data,
+export class CreateSignalEntityFileDto {
+    @IsNotEmpty()
+    @ApiPropertyOptional({ type: String, description: 'Id of file' })
+    id: string;
+
+    @IsOptional()  // Mark optional if it's not mandatory
+    @ApiPropertyOptional({ type: String, description: 'Signal Entity ID' })
+    signal_entity_id: string;
+
+    @IsOptional()  // Mark optional if not always required
+    @ApiPropertyOptional({ type: () => SignalEntity, description: 'Associated Signal Entity' })
+    SignalEntity: SignalEntity;
+
+    @IsOptional()  // Optional if not provided always
+    @ApiPropertyOptional({ type: String, description: 'Original name of file' })
+    original_name: string;
+
+    @IsNotEmpty()  // Required as per your API's behavior
+    @ApiPropertyOptional({ type: String, description: 'Name of file' })
+    file_name: string;
+
+    @IsOptional()  // Optional, not always needed
+    @ApiPropertyOptional({ type: String, description: 'Path of file' })
+    file_path: string;
+
+    @IsOptional()  // Optional, can be omitted
+    @ApiPropertyOptional({ type: String, description: 'Number of file' })
+    file_number: string;
+
+    @IsNotEmpty()  // Required as per your API's behavior
+    @ApiPropertyOptional({ type: String, description: 'Comments of file' })
+    file_comments: string;
+}
+
+
+
+
+
+
+
+
+
+
+async updateEntityFile(entityFile: CreateSignalEntityFileDto): Promise<SignalEntityFiles> {
+  try {
+    console.log("Updating or inserting file with ID:", entityFile.id);
+    
+    // Ensure missing optional fields are handled properly, e.g. by setting defaults or ignoring them.
+    const updatedFile = await this.signalEntityFilesRepository.save({
+      ...entityFile,
+      original_name: entityFile.original_name ?? '',  // Provide default if null
+      file_path: entityFile.file_path ?? '',
+      file_number: entityFile.file_number ?? ''
     });
-    dialogRef.afterClosed().subscribe((data1) => {
-      // data1.comments=data1.comments.replace(/<[\/]*p>/g, '');
-      data1.file_comments=data1.file_comments? data1.file_comments.replace(/<[\/]*p>/g, '') : null;
-      let myEntityFile;
-      if (data1) {
-        // if(data1.preceding_entity) {
-        //   data1.preceding_entity_id = data1.preceding_entity.id;
-        // }
-        for (let i = 0; i < data1.signalEntityFiles.length; i++) {
-          // data1.signalEntityFiles[i].file_number = item.id
-          if(item.file_id===data1.signalEntityFiles[i].id)
-          {
-            console.log(data1);
-            data1.signalEntityFiles[i].file_comments=data1.file_comments;
-            myEntityFile=data1.signalEntityFiles[i];
-            console.log(myEntityFile);
-            break;
-          }
-        }
-        const fields: {[key:string]:string}= {};
-        // Object.keys(data1).forEach(key => data1[key] ? fields[key] = data1[key] : key);
-        if(item.id) {
-          this.service
-          .updateSignalEntityFile(myEntityFile)
-          .subscribe((result: any) => {
-            this.getSignalItemById(this.signalItem?.id);
-            // console.log(fields);
-          });
-          // console.log(data1);
-          
-        }
-        
-      }
-    });
+    
+    console.log('Entity file after update:', updatedFile);
+    return updatedFile;
+  } catch (error) {
+    console.error('Error while updating entity file:', error);
+    throw error;
   }
-  
-, 
-
-
-
-
-
-
-updateSignalEntityFile(item: SignalEntity) {
-    let precedingOption = [];
-    if (this.signalItem.precedingSignal) {
-      precedingOption = this.signalItem.precedingSignal.signalEntities;
-    }
-
-    const data = {
-      type: 'entity',
-      title: 'Edit Event File',
-      event_list_comments: this.signalItem.event_list_comments,
-      dropdownOptions: this.dropdownOptionsSorted,
-      precedingEntityOption: precedingOption,
-      editData: item,  // Pass only the file entity from the specific row
-      signalNumber: this.signalItem.signal_number,
-    };
-
-    const dialogRef = this.dialog.open(UpdateIndividualComponent, {
-      width: '70%',
-      data: data,
-    });
-
-    dialogRef.afterClosed().subscribe((data1) => {
-      data1.file_comments = data1.file_comments ? data1.file_comments.replace(/<[\/]*p>/g, '') : null;
-      
-      if (data1 && item.id) {
-        // Update only the specific file in the current row
-        const updatedFile = {
-          ...item,  // Keep existing properties
-          file_comments: data1.file_comments,  // Update comments
-        };
-
-        this.service
-          .updateSignalEntityFile(updatedFile)  // Send update for only this file
-          .subscribe((result: any) => {
-            this.getSignalItemById(this.signalItem?.id);
-          });
-      }
-    });
-  }
-
-
-
-
-
-updateSignalEntityFile(item: SignalEntity) {
-    let precedingOption = [];
-    if (this.signalItem.precedingSignal) {
-      precedingOption = this.signalItem.precedingSignal.signalEntities;
-    }
-
-    // Find the specific file in signalEntityFiles that matches the provided file ID
-    let myEntityFile;
-    for (let i = 0; i < this.signalItem.signalEntityFiles.length; i++) {
-      if (item.file_id === this.signalItem.signalEntityFiles[i].id) {
-        myEntityFile = this.signalItem.signalEntityFiles[i];
-        break;
-      }
-    }
-
-    // Prepare the data to pass to the dialog, including only the necessary fields
-    const data = {
-      type: 'entity',
-      title: 'Edit Event File',
-      file_comments: myEntityFile?.file_comments ? myEntityFile.file_comments.replace(/<[\/]*p>/g, '') : null, // Clean up the comments if needed
-      signalNumber: this.signalItem.signal_number,
-      myEntityFile: myEntityFile // Pass the selected file to the dialog
-    };
-
-    const dialogRef = this.dialog.open(UpdateIndividualComponent, {
-      width: '70%',
-      data: data,
-    });
-
-    dialogRef.afterClosed().subscribe((updatedData) => {
-      if (updatedData && myEntityFile) {
-        // Update the file comments with the new value from the dialog
-        myEntityFile.file_comments = updatedData.file_comments;
-
-        // Update the signal entity file with the edited data
-        this.service.updateSignalEntityFile(myEntityFile).subscribe((result: any) => {
-          // Reload the signal item to reflect the changes
-          this.getSignalItemById(this.signalItem?.id);
-        });
-      }
-    });
-  }
+}
