@@ -1,0 +1,69 @@
+
+
+<h1 mat-dialog-title class="title"> {{data.title}}</h1>
+
+<!-- <form action="" [formGroup]="commentsForm"> -->
+
+<!-- </form> -->
+<div mat-dialog-content>
+  <signaldb-general-info 
+  *ngIf="data.type === 'general' || data.type === 'advanced'"
+  #generalInfoItem
+  [type]="data.type"
+  [data]="data.generalInfo"
+  [dropdownOptions]="data.dropdownOptions"
+  >
+
+  </signaldb-general-info>
+    <signaldb-quill-editor
+    *ngIf="data.type === 'project'" 
+    #quillEditorItem
+    [val]="commentsValue"
+     (valueChanged)="valueChangedFrmChild($event)">
+    </signaldb-quill-editor>
+    <signaldb-event
+[data]="data.signalContent"
+*ngIf="data.type === 'event'" 
+#event
+[eventListDocs]="data.eventFiles">
+</signaldb-event>
+    <signaldb-signal-content
+          #signalContent
+          *ngIf="data.type === 'signalContent'"
+          [data]="data.signalContent"
+          [eventListDocs]="data.eventFiles"
+          [channelListDocs]="data.channelFiles"
+        ></signaldb-signal-content>
+        <signaldb-setup-information
+          #setupInfo
+          *ngIf="data.type === 'setupInfo'"
+          [data]="data.setupInfo"
+          [suspensionDocs]="data.suspensionFiles"
+          [kinematicsDocs]="data.kinematicsFiles"
+          [toolingInfoData]="data.toolingInfoData"
+          [toolingDocs]="data.toolingFiles"
+        ></signaldb-setup-information>
+        <signaldb-tooling
+          #tooling
+          *ngIf="data.type === 'toolingInfo'"
+          [data]="data.toolingInfoData"
+          [toolingDocs]="data.toolingFiles"
+        ></signaldb-tooling>
+        <signaldb-entity-form
+          *ngIf="data.type === 'entity'"
+          [dropdownOptions]="data.dropdownOptions"
+          [precedingEntityOption]="data.precedingEntityOption"
+          [precedingValSelected]="data.precedingValSelected"
+          [editData]="data.editData"
+          [currenSignalNumber]="data.signalNumber"
+          [precedingSinalNumber]="data.precedingSinalNumber"
+          [type]="'editView'"
+          [fileError]="fileError"
+          #signalEntity
+        ></signaldb-entity-form>
+  </div>
+  <div mat-dialog-actions class="dialog-action">
+    <button mat-raised-button (click)="close()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="submitData()">Save</button>
+  </div>
+
