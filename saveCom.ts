@@ -70,8 +70,8 @@ onSignalFileSelected(event: any) {
             // You can process uploadedFiles if needed
             console.log('Uploaded Files:', uploadedFiles);
 
-            // After successful upload, save the comments
-            this.saveCommentsAfterUpload();
+            // After successful upload, update the comments
+            this.updateComments(uploadedFiles); // Call to update comments after upload
           }
         },
         error: (error: any) => {
@@ -90,21 +90,30 @@ onSignalFileSelected(event: any) {
   }
 }
 
-// Helper function to save comments after file upload
-saveCommentsAfterUpload(): void {
-  const promises = this.signalFiles.map(file => {
+// Function to update comments for already uploaded files
+updateComments(uploadedFiles: any): void {
+  const commentsFormData = new FormData();
+
+  this.signalFiles.forEach(file => {
     if (file.file_comments && file.file_comments !== '') {
-      return this.shared.saveFileComments(file.file_id, file.file_comments).toPromise();
-    } else {
-      return Promise.resolve(); // Skip saving if no comments exist
+      // Append comments related to each file
+      commentsFormData.append('file_comments', file.file_comments);
+      commentsFormData.append('file_name', file.file_name);  // Include file name to link comments with files
+      commentsFormData.append('file_id', file.file_id);  // Include file ID if available
     }
   });
 
-  Promise.all(promises)
-    .then(() => {
-      console.log('All comments saved successfully');
-    })
-    .catch((error) => {
-      console.error('Error saving comments after upload:', error);
-    });
+  if (commentsFormData.has('file_comments')) { // If there are comments to update
+    this.shared.bulkFileUpload(commentsFormData) // Reuse the existing bulkFileUpload method
+      .subscribe({
+        next: (response) => {
+          console.log('Comments updated successfully:', response);
+        },
+        error: (error) => {
+          console.error('Error updating comments:', error);
+        }
+      });
+  } else {
+    console.log('No comments to update.');
+  }
 }
