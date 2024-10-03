@@ -1,0 +1,244 @@
+<!-- Container to be displayed when the type is 'create'-->
+<div class="form-container" *ngIf="type === 'create'">
+  <form [formGroup]="entityForm">
+    <div class="entity-form-row">
+     
+    </div>
+   
+    <div  class="entity-form-row">
+      
+      <div class="form-div" *ngIf="precedingEntityOption.length > 0">
+        
+      </div>
+
+
+    </div>
+    <!-- <div class="create-form-container"> -->
+      <div class="form-row-item file-upload-div">
+        <div class="file-upload-div-inner">
+        <div>Upload event files-Signal</div>
+        
+      <input type="file" class="file-upload-input" webkitdirectory  #signalFolderUpload (change)="onSignalFileSelected($event)">
+      <button
+        mat-flat-button
+        color="primary"
+        matTooltip="upload file"
+        class="upload-btn icon-btn"
+        [disabled]="isUploading || signalFiles.length > 0"
+        (click)="signalFolderUpload.click()"
+      >
+        <mat-icon>attach_file</mat-icon>
+        
+      </button>
+      <!-- <div class ="file-path"> -->
+          <!-- <div *ngFor="let file of signalFiles "> -->
+            <!-- <td>{{ file.number }}</td>
+            <td>{{ file.name }}</td>
+      
+            
+            {{file.webkitRelativePath}} -->
+          <!-- </div> -->
+        <!-- </div> -->
+      </div>
+      </div>
+
+    
+        <mat-error *ngIf="fileError">{{fileError}}</mat-error>
+        <div *ngIf="isUploading" class="progress-container">
+          <span>File is uploading: Progress: {{uploadProgress}}%</span>          
+          <mat-progress-bar
+            class="progress-bar"
+            mode="determinate"
+            [value]="uploadProgress"
+            *ngIf="isUploading"
+          ></mat-progress-bar>
+        </div>
+
+        <!-- <div class="form-row-item file-upload-div"> -->
+
+        
+
+      <!-- </div> -->
+
+        
+   
+      <div class="form-row-item AllFiles-upload-div"> 
+        <div class="form-row-item signalFiles-upload-div">Signal Files:
+          <div 
+          *ngFor="let file of signalFiles; index as i" 
+          
+          class="file-names">
+          <ng-container *ngIf="file.allowedFiles">
+            <span class="file-name-span" 
+                (click)="downloadFile(file.file_name, file.original_name, entityForm.value.signal_name)"
+                >{{ file.original_name }}</span>
+          <span
+            class="action-span"
+            (click)="deleteSignalFile(i, file.file_name)"
+            ><mat-icon>delete</mat-icon></span></ng-container>
+        </div>
+          
+
+  
+          
+          </div>
+
+          <div class="form-row-item otherfile-upload-div"> Other Files:
+            <div 
+          *ngFor="let file of signalFiles; index as i" 
+          
+          class="file-names">
+          <ng-container *ngIf="!file.allowedFiles">
+            <span class="file-name-span" 
+                (click)="downloadFile(file.file_name, file.original_name, entityForm.value.signal_name)"
+                >{{ file.original_name }}</span>
+          <span
+            class="action-span"
+            (click)="deleteSignalFile(i, file.file_name)"
+            ><mat-icon>delete</mat-icon></span></ng-container>
+        </div>
+          </div>
+          
+
+  
+          
+          </div>
+  
+  
+     
+  
+          
+      
+      <br>
+
+      <quill-editor (onFocus)="focus($event)"
+      class="quill-editor-create-new"
+      [(ngModel)]="entityForm.value.comments"
+      style="min-height: 40px;height:auto;margin-bottom: 20px;"  formControlName="comments"
+      placeholder="'Type comments here 123...'"></quill-editor>
+     
+    <!-- <quill-editor (onFocus)="focus($event)"
+    class="quill-editor-create-new"
+    [(ngModel)]="entityForm.value.entity_list_comments"
+    style="min-height: 40px;height:auto;margin-bottom: 20px;"  formControlName="entity_list_comments"
+    placeholder="'Type comments here...'"></quill-editor> -->
+    <!-- </div> -->
+    
+  </form>
+</div>
+<!-- Container to be displayed when the type is 'edit'-->
+<div class="editing-form-container"  *ngIf="type === 'edit'">
+  <form [formGroup]="entityForm">
+ 
+  <div  class="property-div">
+   
+  </div>
+  <div class="property-div">
+   
+  </div>
+  <div class="property-div" *ngIf="precedingEntityOption.length > 0">
+    
+    
+  </div>
+  <div class="property-div">
+    <div class="property-label"><b>Upload event files</b></div>
+    <div class="form-row-item file-upload-div-edit">
+      <!-- <div>Upload Signal files</div> -->
+      <input
+        type="file"
+        class="file-upload-input"
+        #signalFileUpload
+        (change)="onSignalFileSelected($event)"
+        multiple
+      />
+      <button
+        mat-flat-button
+        color="primary"
+        matTooltip="upload file"
+        class="upload-btn icon-btn"
+        [disabled]="signalFiles.length > 0"
+        (click)="signalFileUpload.click()"
+      >
+        <mat-icon>attach_file</mat-icon>
+      </button>
+      <br>
+      <mat-error *ngIf="fileError">{{fileError}}</mat-error>
+      <div *ngIf="isUploading" class="progress-container">
+        <span>File is uploading: Progress: {{uploadProgress}}%</span>          
+        <mat-progress-bar
+          class="progress-bar"
+          mode="determinate"
+          [value]="uploadProgress"
+          *ngIf="isUploading"
+        ></mat-progress-bar>
+      </div>
+
+      <div 
+        *ngFor="let file of signalFiles; index as i" 
+        class="file-names">
+          <span class="file-name-span" 
+              (click)="downloadFile(file.file_name, file.original_name, entityForm.value.signal_name)"
+              >{{ file.original_name }}</span>
+        <span
+          class="action-span"
+          (click)="deleteSignalFile(i, file.file_name)"
+          ><mat-icon>delete</mat-icon></span>
+      </div>
+    </div>
+  </div>
+
+ 
+  
+
+  
+ 
+  <div class="property-div quill-editor-form-div-edit">
+    <div class="property-label"><b>Comments</b></div>
+    <div class="property-value">
+      <quill-editor (onFocus)="focus($event)"
+    [(ngModel)]="entityForm.value.comments"
+    style="min-height: 40px;height:auto"  formControlName="comments"
+    placeholder="'Type comments here...'"></quill-editor>
+    </div>
+    
+
+  </div>
+
+</form>
+
+</div>
+<!-- Container to be displayed when the type is 'editView'-->
+<div class="form-container" *ngIf="type === 'editView'">
+  <form [formGroup]="entityForm">
+    <div class="entity-form-row">
+      
+    </div>
+   
+    <div class="entity-form-row">
+      
+    </div>
+    <div class="create-form-container">
+      <!-- <div class="form-row-item file-upload-div"> -->
+        
+        
+        
+        <!-- <div  *ngFor="let file of signalFiles; index as i" 
+          class="file-names">
+            <span class="file-name-span" 
+                (click)="downloadFile(file.file_name, file.original_name, entityForm.value.signal_name)"
+                >{{ file.original_name }}</span>
+                
+          
+        </div> -->
+      <!-- </div> -->
+      <div class="form-div quill-editor-form-div">         
+      </div>
+      <quill-editor (onFocus)="focus($event)"
+      class="quill-editor-editView"
+      [(ngModel)]="entityForm.value.file_comments"
+    
+      style="min-height: 40px;height:auto"  formControlName="file_comments"
+      placeholder="'Type comments here... 432'"></quill-editor>
+    </div>
+  </form>
+</div>
